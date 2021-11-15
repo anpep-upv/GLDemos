@@ -60,7 +60,7 @@ static void init_scene(void)
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
     
     g_list_sphere = glGenLists(1);
-    create_list_circle(g_list_sphere, 1.0f, 24);
+    create_list_circle(g_list_sphere, 1.0f, 64);
 }
 
 static void update_localtime(int value _Unused)
@@ -68,6 +68,7 @@ static void update_localtime(int value _Unused)
     time_t tm;
     time(&tm);
     g_localtime = localtime(&tm);
+    glutSetWindowTitle(asctime(g_localtime));
     glutTimerFunc(1000, update_localtime, value);
 }
 
@@ -103,20 +104,22 @@ static void on_display(void)
     glPushMatrix();
     glTranslatef(0.0f, 0.0f, 10.0f);
     glRotatef(0.6666f * g_sphere_theta, 1.0f, 1.0f, 0.0f);
-    glutSolidCube(7.5f);
+    glRotatef(-0.6666f * g_sphere_theta, 0.0f, 0.0f, 1.0f);
+    glutSolidCube(7.0f);
     glPopMatrix();
-    
-    glLineWidth(5.0f);
     
     glColor3f(_Expand_one());
     glPushMatrix();
-    glRotatef(g_sphere_theta, 1.0f, 0.0f, 0.0f);
+    glScalef(1.25f, 1.25f, 1.0f);
+    glRotatef(+g_sphere_theta, 1.0f, 1.0f, 0.0f);
     glCallList(g_list_sphere);
     glPopMatrix();
     
     glColor3f(_Expand_one());
     glPushMatrix();
-    glRotatef(g_sphere_theta, 0.0f, 1.0f, 0.0f);
+    glScalef(1.5f, 1.5f, 1.0f);
+    glRotatef(+g_sphere_theta, 1.0f, 1.0f, 0.0f);
+    glRotatef(-g_sphere_theta, 1.0f, 0.0f, 0.0f);
     glCallList(g_list_sphere);
     glPopMatrix();
     
@@ -127,31 +130,47 @@ static void on_display(void)
     glCallList(g_list_sphere);
     glPopMatrix();
     
-    glColor3f(_Expand_one());
-    glPushMatrix();
-    glRotatef(g_localtime->tm_sec * (360 / 60), 0.0f, 0.0f, 1.0f);
-    glBegin(GL_LINES);
-    glVertex2f(0.0f, 0.5f);
-    glVertex2f(0.0f, 1.0f);
-    glEnd();
-    glPopMatrix();
+    for (int sec = 1; sec <= 60; sec++) {
+        if (g_localtime->tm_sec >= sec - 1)
+            glColor4f(_Expand_one(), 0.75);
+        else
+            glColor4f(_Expand_one(), 0.25);
+        
+        glPushMatrix();
+        glRotatef(sec * (360 / 60), 0.0f, 0.0f, 1.0f);
+        glBegin(GL_LINES);
+        
+        
+        if (sec % 15 == 0) {
+            glVertex2f(0.0f, 0.85f);
+            glVertex2f(0.0f, 0.95f);
+        } else {
+            glVertex2f(0.0f, 0.70f);
+            glVertex2f(0.0f, 0.75f);
+        }
+            
+        glEnd();
+        glPopMatrix();
+    }
     
     glColor3f(_Expand_one());
     glPushMatrix();
     glRotatef(g_localtime->tm_min * (360 / 60), 0.0f, 0.0f, 1.0f);
     glBegin(GL_LINES);
-    glVertex2f(0.0f, 0.5f);
-    glVertex2f(0.0f, 1.0f);
+    glVertex2f(0.0f, 0.75f);
+    glVertex2f(0.0f, 1.25f);
     glEnd();
     glPopMatrix();
     
     glColor3f(1.0f, 0.0f, 0.0f);
+    glLineWidth(4.0f);
     glPushMatrix();
-    glRotatef(g_localtime->tm_hour * (360 / 24), 0.0f, 0.0f, 1.0f);
+    glRotatef((g_localtime->tm_hour % 12) * (360 / 12), 0.0f, 0.0f, 1.0f);
     glBegin(GL_LINES);
-    glVertex2f(0.0f, 0.5f);
+    glVertex2f(0.0f, 0.75f);
     glVertex2f(0.0f, 1.0f);
     glEnd();
+    glLineWidth(1.0f);
     glPopMatrix();
     
     glutSwapBuffers();
