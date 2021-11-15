@@ -20,7 +20,7 @@
 #if defined(__clang__) || defined(__GNUC__) || defined(__GNUG__)
 #define _Unused __attribute__((unused))
 #define _Inline inline __attribute__((always_inline))
-#elif defined(_MSC_VERSION)
+#elif defined(_MSC_VER)
 #define _Unused
 #define _Inline __forceinline
 #endif

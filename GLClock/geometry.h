@@ -27,7 +27,7 @@
 #define M_TAU 6.283185307179586
 #endif
 
-#define _Rad(theta) ((theta) * M_PI / 180);
+#define _Rad(theta) ((theta) * (float)M_PI / 180.0f);
 
 #include "platform_attributes.h"
 #include "platform_graphics.h"
@@ -37,7 +37,7 @@ _Inline void create_list_circle(GLint gl_list, float radius, int vertices)
     glNewList(gl_list, GL_COMPILE);
     glBegin(GL_LINE_LOOP);
     for (int i = 0; i < vertices; i++) {
-        float point = M_TAU * ((float)i / (float)vertices);
+        float point = (float)M_TAU * ((float)i / (float)vertices);
         glVertex2f(radius * cosf(point), radius * sinf(point));
     }
     glEnd();

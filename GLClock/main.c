@@ -16,7 +16,6 @@
 // Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
 
 #include <stdio.h>
-#include <stdint.h>
 #include <time.h>
 
 #include "platform_graphics.h"
@@ -45,7 +44,7 @@ static int g_frame = 0;
 static GLint g_list_sphere;
 
 static float g_sphere_theta = 0.0f;
-static const float g_sphere_velocity = _Rad(3600);
+static const float g_sphere_velocity = _Rad(3600.0f);
 #pragma endregion
 
 #pragma region Local time information
@@ -137,7 +136,7 @@ static void on_display(void)
             glColor4f(_Expand_one(), 0.25);
         
         glPushMatrix();
-        glRotatef(sec * (360 / 60), 0.0f, 0.0f, 1.0f);
+        glRotatef((float)sec * (360.0f / 60.0f), 0.0f, 0.0f, 1.0f);
         glBegin(GL_LINES);
         
         
@@ -155,7 +154,7 @@ static void on_display(void)
     
     glColor3f(_Expand_one());
     glPushMatrix();
-    glRotatef(g_localtime->tm_min * (360 / 60), 0.0f, 0.0f, 1.0f);
+    glRotatef((float)g_localtime->tm_min * (360.0f / 60.0f), 0.0f, 0.0f, 1.0f);
     glBegin(GL_LINES);
     glVertex2f(0.0f, 0.75f);
     glVertex2f(0.0f, 1.25f);
@@ -165,7 +164,7 @@ static void on_display(void)
     glColor3f(1.0f, 0.0f, 0.0f);
     glLineWidth(4.0f);
     glPushMatrix();
-    glRotatef((g_localtime->tm_hour % 12) * (360 / 12), 0.0f, 0.0f, 1.0f);
+    glRotatef((float)(g_localtime->tm_hour % 12) * (360.0f / 12.0f), 0.0f, 0.0f, 1.0f);
     glBegin(GL_LINES);
     glVertex2f(0.0f, 0.75f);
     glVertex2f(0.0f, 1.0f);

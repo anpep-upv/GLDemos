@@ -24,5 +24,5 @@ struct vec3f {
 #define _Expand_zero() 0.0f, 0.0f, 0.0f
 #define _Expand_one() 1.0f, 1.0f, 1.0f
 #define _Expand(v) v.x, v.y, v.z
-#define _Vec(_x, _y, _z) ((struct vec3f) { .x = (_x), .y = (_y), .z = (_z) })
+#define _Vec(_x, _y, _z) { .x = (_x), .y = (_y), .z = (_z) }
 
